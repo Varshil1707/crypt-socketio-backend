@@ -6,7 +6,7 @@ const axios = require("axios");
 require('dotenv').config();
 
 const app = express();
-const port = 4500;
+const port = process.env.PORT ;
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
 });
 
 const server = app.listen(port, () => {
-  console.log("Server is running on port 4500");
+  console.log(`Server is running on port ${port}`);
   const io = socket(server);
 
   io.on("connection", (socket) => {

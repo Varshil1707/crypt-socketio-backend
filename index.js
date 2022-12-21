@@ -1,13 +1,12 @@
-const http = require("https");
 const express = require("express");
 const cors = require("cors");
 const socket = require("socket.io");
 const axios = require("axios");
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT ;
-const APIdata = process.env.api
+const port = process.env.PORT;
+const APIdata = process.env.api;
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -23,29 +22,27 @@ const server = app.listen(port, () => {
       console.log(data);
     });
     socket.emit("bac", "Hello");
-    
+
     console.log("connection made");
 
     const getData = () => {
       axios
-        .get(
-          APIdata,
-          {
-            headers: { "Accept-Encoding": "gzip,deflate,compress" },
-          }
-        )
+        .get(APIdata, {
+          headers: { "Accept-Encoding": "gzip,deflate,compress" },
+        })
         .then((data) => {
           socket.emit("data-emit", data.data);
-          console.log(data.data)
+          console.log(data.data);
         })
-        .catch((err) => {socket.emit("data-error", err) ; console.log(err.message)});
+        .catch((err) => {
+          socket.emit("data-error", err);
+          console.log(err.message);
+        });
     };
     getData();
 
-
     setInterval(() => {
       getData();
-    }, 5000);
+    }, 10000);
   });
-
 });

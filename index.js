@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT ;
+const APIdata = process.env.api
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -28,7 +29,7 @@ const server = app.listen(port, () => {
     const getData = () => {
       axios
         .get(
-          process.env.api,
+          APIdata,
           {
             headers: { "Accept-Encoding": "gzip,deflate,compress" },
           }
@@ -37,7 +38,7 @@ const server = app.listen(port, () => {
           socket.emit("data-emit", data.data);
           console.log(data.data)
         })
-        .catch((err) => {socket.emit("data-error", err) ; console.log(err)});
+        .catch((err) => {socket.emit("data-error", err) ; console.log(err.message)});
     };
     getData();
 

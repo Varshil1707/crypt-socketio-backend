@@ -40,8 +40,10 @@ const server = app.listen(port, () => {
     };
     getData();
 
+
     setInterval(() => {
       getData();
     }, 5000);
   });
+
 });

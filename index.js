@@ -37,7 +37,7 @@ const server = app.listen(port, () => {
           socket.emit("data-emit", data.data);
           console.log(data.data)
         })
-        .catch((err) => socket.emit("data-error", err));
+        .catch((err) => {socket.emit("data-error", err) ; console.log(err)});
     };
     getData();
 

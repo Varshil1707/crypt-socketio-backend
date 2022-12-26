@@ -8,6 +8,7 @@ const app = express();
 const port = process.env.PORT;
 const APIdata = process.env.api;
 app.use(cors());
+let functionCall = true
 
 app.get("/", (req, res) => {
   console.log("first");
@@ -32,17 +33,23 @@ const server = app.listen(port, () => {
         })
         .then((data) => {
           socket.emit("data-emit", data.data);
-          console.log(data.data);
         })
         .catch((err) => {
           socket.emit("data-error", err);
           console.log(err);
         });
     };
-    getData();
+    
+    if(functionCall) {
+      getData();  
+      functionCall = false
+    }
+     if (!functionCall) {
+      setInterval(() => {
+        getData();
+      }, 50000);
+    }
 
-    setInterval(() => {
-      getData();
-    }, 10000);
+
   });
 });

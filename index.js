@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT;
 const APIdata = process.env.api;
 app.use(cors());
-let functionCall = true
+let errorOccured = true;
 
 app.get("/", (req, res) => {
   console.log("first");
@@ -22,7 +22,6 @@ const server = app.listen(port, () => {
     socket.on("Hello", (data) => {
       console.log(data);
     });
-    socket.emit("bac", "Hello");
 
     console.log("connection made");
 
@@ -33,23 +32,19 @@ const server = app.listen(port, () => {
         })
         .then((data) => {
           socket.emit("data-emit", data.data);
+          console.log("first")
         })
         .catch((err) => {
           socket.emit("data-error", err);
-          console.log(err);
+          console.log(err.message);
+          socket.emit("display-error-message", errorOccured);
         });
     };
-    
-    if(functionCall) {
-      getData();  
-      functionCall = false
-    }
-     if (!functionCall) {
-      setInterval(() => {
-        getData();
-      }, 50000);
-    }
 
+    getData();
 
+    setInterval(() => {
+      getData();
+    }, 50000);
   });
 });

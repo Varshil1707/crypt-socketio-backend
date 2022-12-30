@@ -10,7 +10,7 @@ app.use(cors());
 const port = process.env.PORT;
 let errorOccured = true;
 const APIdata = process.env.api;
-
+var loader
 app.get("/", (req, res) => {
   console.log("first");
 });
@@ -27,6 +27,7 @@ const server = app.listen(port, () => {
     console.log("connection made");
 
     const getData = () => {
+      loader = true
       axios
         .get(APIdata, {
           headers: { "Accept-Encoding": "gzip,deflate,compress" },
@@ -34,13 +35,18 @@ const server = app.listen(port, () => {
         .then((data) => {
           socket.emit("data-emit", data.data);
           console.log("first")
+          
         })
         .catch((err) => {
           socket.emit("data-error", err);
           console.log(err.message);
           socket.emit("display-error-message", errorOccured);
-        });
+        }).finally(()=>{
+          loader = false
+        })
     };
+
+
 
     getData();
     

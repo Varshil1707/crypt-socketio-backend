@@ -5,10 +5,11 @@ const axios = require("axios");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT;
-const APIdata = process.env.api;
 app.use(cors());
+
+const port = process.env.PORT;
 let errorOccured = true;
+const APIdata = process.env.api;
 
 app.get("/", (req, res) => {
   console.log("first");
@@ -42,7 +43,7 @@ const server = app.listen(port, () => {
     };
 
     getData();
-
+    
     setInterval(() => {
       getData();
     }, 50000);
